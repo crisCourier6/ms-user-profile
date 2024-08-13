@@ -6,6 +6,7 @@ import { Routes } from "./routes"
 import * as amqp from "amqplib/callback_api"
 import { Channel } from "amqplib"
 import { UserRatesFoodController } from "./controller/UserRatesFoodController"
+import { UserRejectsAllergenController } from "./controller/UserRejectsAllergenController"
 import { Allergen } from "./entity/Allergen"
 
 AppDataSource.initialize().then(async () => {
@@ -19,6 +20,7 @@ AppDataSource.initialize().then(async () => {
                 throw error1
             }
             const userRatesFoodController = new UserRatesFoodController
+            const userRejectsAllergenController = new UserRejectsAllergenController
             channel.assertExchange("UserProfile", "topic", {durable: false})
 
             channel.assertExchange("FoodProfile", "topic", {durable: false})
@@ -72,6 +74,16 @@ AppDataSource.initialize().then(async () => {
                 else if (action=="remove"){
                     console.log("i should delete all rows with userId = ", content)
                     await userRatesFoodController.removeByUser(content)
+                    .then(result=>{
+                        console.log(result)
+                    })
+                    await userRejectsAllergenController.removeByUser(content)
+                    .then(result => {
+                        console.log(result)
+                    })
+                }
+                else if (action=="removeOne"){
+                    await userRatesFoodController.remove(content.userId, content.foodLocalId)
                     .then(result=>{
                         console.log(result)
                     })
