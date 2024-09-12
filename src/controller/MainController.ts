@@ -53,19 +53,19 @@ export class MainController{
     }
     // allergen
     async allergenAll(request: Request, response: Response, next: NextFunction, channel:Channel) {
-        return this.allergenController.all(response)
+        return this.allergenController.all()
     }
     async allergenOne(request: Request, response: Response, next: NextFunction, channel:Channel) {
-        return this.allergenController.one(request.params.id, response)
+        return this.allergenController.one(request.params.id)
     }
     async allergenSave(request: Request, response: Response, next: NextFunction, channel:Channel) {
-        return this.allergenController.save(request.body, response)
+        return this.allergenController.save(request.body)
     }
     async allergenUpdate(request: Request, response: Response, next: NextFunction, channel:Channel) {
-        return this.allergenController.update(request.params.allergenId, request.body, response)
+        return this.allergenController.update(request.params.allergenId, request.body)
     }
     async allergenRemove(request: Request, response: Response, next: NextFunction, channel:Channel){
-        return this.allergenController.remove(request.params.allergenId, response)
+        return this.allergenController.remove(request.params.allergenId)
     }
     // user rejects allergen
     async userRejectsAllergenAll(request: Request, response: Response, next: NextFunction, channel:Channel) {
@@ -73,7 +73,7 @@ export class MainController{
     }
     async userRejectsAllergenAllByUser(request: Request, response: Response, next: NextFunction, channel:Channel) {
         const userRejectsRows = await this.userRejectsAllergenController.byUser(request.params.userId, response)
-        return this.allergenController.getAllbyIds(userRejectsRows, response)
+        return this.allergenController.getAllbyIds(userRejectsRows)
     }
     async userRejectsAllergenOne(request: Request, response: Response, next: NextFunction, channel:Channel) {
         return this.userRejectsAllergenController.one(request.params.userId, request.params.allergenId, response)

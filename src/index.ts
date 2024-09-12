@@ -8,6 +8,7 @@ import { Channel } from "amqplib"
 import { UserRatesFoodController } from "./controller/UserRatesFoodController"
 import { UserRejectsAllergenController } from "./controller/UserRejectsAllergenController"
 import { Allergen } from "./entity/Allergen"
+import { AllergenController } from "./controller/AllergenController"
 
 AppDataSource.initialize().then(async () => {
     amqp.connect('amqps://zqjaujdb:XeTIDvKuWz8bHL5DHdJ9iq6e4CqkfqTh@gull.rmq.cloudamqp.com/zqjaujdb', (error0, connection) => {
@@ -21,16 +22,22 @@ AppDataSource.initialize().then(async () => {
             }
             const userRatesFoodController = new UserRatesFoodController
             const userRejectsAllergenController = new UserRejectsAllergenController
+            const allergenController = new AllergenController
+
             channel.assertExchange("UserProfile", "topic", {durable: false})
 
             channel.assertExchange("FoodProfile", "topic", {durable: false})
             channel.assertExchange("Accounts", "topic", {durable: false})
+            channel.assertExchange("FoodEdits", "topic", {durable: false})
 
             channel.assertQueue("UserProfile_UserRatesFood", {durable: false})
             channel.bindQueue("UserProfile_UserRatesFood", "FoodProfile", "user-rates-food.*")
 
             channel.assertQueue("UserProfile_Accounts", {durable: false})
             channel.bindQueue("UserProfile_Accounts", "Accounts", "user.*")
+
+            channel.assertQueue("UserProfile_Allergen", {durable: false})
+            channel.bindQueue("UserProfile_Allergen", "FoodEdits", "allergen.*")
 
             // create express app
             const app = express()
@@ -84,6 +91,29 @@ AppDataSource.initialize().then(async () => {
                 }
                 else if (action=="removeOne"){
                     await userRatesFoodController.remove(content.userId, content.foodLocalId)
+                    .then(result=>{
+                        console.log(result)
+                    })
+                }
+            }, {noAck: true})
+
+            channel.consume("UserProfile_Allergen", async (msg)=>{
+                let action = msg.fields.routingKey.split(".")[1]
+                let content = JSON.parse(msg.content.toString())
+                if (action=="save"){
+                    await allergenController.save(content)
+                    .then(result => {
+                        console.log(result)
+                    })
+                }
+                else if (action=="update"){
+                    await allergenController.update(content.id, content)
+                    .then(result=>{
+                        console.log(result)
+                    })
+                }
+                else if (action=="remove"){
+                    await allergenController.remove(content.id)
                     .then(result=>{
                         console.log(result)
                     })
