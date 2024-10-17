@@ -11,7 +11,11 @@ export class AllergenController {
     // entradas:
     // salidas: Array con todas las filas de la tabla food_local
     async all() {
-        return this.allergenRepository.find()
+        return this.allergenRepository.find({
+            order: {
+                name: 'ASC', // Sort by allergen name in ascending order
+            },
+        });
     }
     //one(id: string)
     // entradas: id: id del alimento que se quiere encontrar
