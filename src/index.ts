@@ -139,9 +139,9 @@ AppDataSource.initialize().then(async () => {
             // }
 
             // start express server
-            app.listen(3003)
+            app.listen(process.env.PORT)
 
-            console.log("Express server has started on port 3003. Open http://localhost:3003/profile to see results")
+            console.log(`Express server has started on port ${process.env.PORT}. Open ${process.env.LOCAL_URL}:${process.env.PORT}/profile to see results`)
 
             process.on("beforeExit", ()=>{
                 console.log("closing")
