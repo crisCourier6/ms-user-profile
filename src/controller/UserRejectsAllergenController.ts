@@ -1,10 +1,10 @@
 import { AppDataSource } from "../data-source"
-import { NextFunction, Request, Response } from "express"
+import { Response } from "express"
 import { UserRejectsAllergen } from "../entity/UserRejectsAllergen"
 
 export class UserRejectsAllergenController {
 
-    private UserRejectsAllergenRepository = AppDataSource.getRepository(UserRejectsAllergen)
+    private readonly UserRejectsAllergenRepository = AppDataSource.getRepository(UserRejectsAllergen)
 
     async all(res: Response) {
         return this.UserRejectsAllergenRepository.find()

@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Unique } from "typeorm"
+import { Entity, PrimaryColumn, ManyToOne, JoinColumn, Unique } from "typeorm"
 import { Allergen } from "./Allergen"
 
 @Entity()

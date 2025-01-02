@@ -1,10 +1,10 @@
 import { AppDataSource } from "../data-source"
-import { NextFunction, Request, Response } from "express"
+import { Response } from "express"
 import { UserRatesFood } from "../entity/UserRatesFood"
 
 export class UserRatesFoodController {
 
-    private UserRatesFoodRepository = AppDataSource.getRepository(UserRatesFood)
+    private readonly UserRatesFoodRepository = AppDataSource.getRepository(UserRatesFood)
 
     async all(res: Response) {
         return this.UserRatesFoodRepository.find()

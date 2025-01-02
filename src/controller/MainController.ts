@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express"
 import { UserRatesFoodController } from "./UserRatesFoodController"
-import * as amqp from "amqplib/callback_api"
 import { Channel } from "amqplib"
 import { AllergenController } from "./AllergenController"
 import { UserRejectsAllergenController } from "./UserRejectsAllergenController"
@@ -8,9 +7,9 @@ import { UserRejectsAllergenController } from "./UserRejectsAllergenController"
 
 export class MainController{
 
-    private userRatesFoodController = new UserRatesFoodController
-    private allergenController = new AllergenController
-    private userRejectsAllergenController = new UserRejectsAllergenController
+    private readonly userRatesFoodController = new UserRatesFoodController
+    private readonly allergenController = new AllergenController
+    private readonly userRejectsAllergenController = new UserRejectsAllergenController
     // user rates food
     async userRatesFoodAll(request: Request, response: Response, next: NextFunction, channel:Channel) {
         return this.userRatesFoodController.all(response)
